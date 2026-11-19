@@ -35,6 +35,22 @@ MEMORY_CLEAR_TRIGGERS = [
 ]
 
 
+CORE_LAB_FACTS = [
+    "Creators are Kishore, Mohandas, and Latheeswaran at iGrid Lab. They are young, unmarried engineers.",
+    "Lab Ownership & Incharges: This lab is owned by the college. The owner and leader is Dr. G. Balakrishnan. The two incharges are Miss Barkath Nisha and Miss Rubaa Sri.",
+    "Purpose of the Lab: The purpose of this lab is for students to do innovative projects and turn their suppressed dreams into reality.",
+    "Lab Equipments: The lab owns high-tech equipment including 3D printer, Laser machine, VR and AR, professional toolkits, Drone, and microcontrollers from Arduino Uno to Jetson Nano.",
+    "Microcontrollers Available: Arduino Uno, Arduino Mega, ESP32, Raspberry Pi 5, and Jetson Nano.",
+    "Electrical & Electronic Components: Raspberry Pi Cam, ESP32 Cam, Servo motors, IMU sensors, PCA9685 servo motor driver, L298N DC motor driver, IR sensor, Buck converter, 12V battery, 3.3V battery, data cables, Waveshare display.",
+    "Student Innovations in Lab: In this lab, students have created 20+ innovative projects, turning their dreams into reality.",
+    "How to Join iGrid Lab: 1. Take an A4 sheet and pen. 2. Write your details in 'From' and college details in 'To'. 3. Subject: Request to join the iGrid Lab. 4. Write letter body (can use ChatGPT for help). 5. Required signatures in order: Your signature, Department Mentor, HOD, iGrid Mentor Mr. Manikandan (ECE HOD), Vice Principal Dr. Vaijayanthi, and Principal & Director Dr. G. Balakrishnan.",
+    "College Leadership: Indra Ganesan Institutions Chairman is Shri T. Ganesan, Secretary is Er. G. Rajasekaran, and Principal & Director is Dr. G. Balakrishnan.",
+    "Biography of Dr. G. Balakrishnan: Principal & Director of Indra Ganesan College of Engineering (IGCE), Tiruchirappalli, and Director of Indra Ganesan Institutions. Holds Ph.D., M.E., and B.E. (First Class with Distinction) from Anna University, Chennai. Has 15+ years of experience, 50+ publications, 100+ students guided. Office: Admin Block First Floor, Mon-Fri 9AM-5PM (principal@igceng.com, +91-431-2901621).",
+    "Constituent Colleges and Principals of Indra Ganesan Institutions: Engineering: Dr. G. Balakrishnan (Principal & Director); Medical Science (Siddha): Dr. A. Ganesan; Arts & Science: Dr. M. Kannan; Nursing: Dr. S. Sarojini / Dr. P. Kirupa; Pharmacy: Dr. M. Jesu Pillai; Physiotherapy: Dr. N. N. Bobby; Naturopathy & Yogic Sciences: Dr. P. Vivekhanandha; Education: Dr. P. Rajendran / Dr. Manimaran Govindaswamy.",
+    "When the Lab Started: The IGRID Lab (Intelligent Generative Robotics, IoT & Deep-Tech Lab) is a multidisciplinary deep-technology and innovation center at Indra Ganesan College of Engineering in Tiruchirappalli, Tamil Nadu. Inaugurated in December 2025 in partnership with HowNWhy, the lab connects students, faculty, and researchers to build and test real-world engineering solutions."
+]
+
+
 class MemoryManager:
     """Manages persistent robot memory stored in a local JSON file."""
 
@@ -44,14 +60,10 @@ class MemoryManager:
 
     def _ensure_file_exists(self):
         if not os.path.exists(self.filepath):
+            now = time.strftime("%Y-%m-%d %H:%M:%S")
             initial_data = {
-                "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "facts": [
-                    {
-                        "note": "Creators are Kishore, Mohandas, and Latheeswaran at iGrid Lab. They are young, unmarried engineers.",
-                        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
-                    }
-                ]
+                "created_at": now,
+                "facts": [{"note": fact, "timestamp": now} for fact in CORE_LAB_FACTS]
             }
             with open(self.filepath, "w", encoding="utf-8") as f:
                 json.dump(initial_data, f, ensure_ascii=False, indent=2)
@@ -91,15 +103,11 @@ class MemoryManager:
         return [item["note"] for item in data.get("facts", []) if "note" in item]
 
     def clear_memories(self) -> bool:
-        """Reset learned memories."""
+        """Reset learned memories back to core lab knowledge."""
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
         data = {
-            "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "facts": [
-                {
-                    "note": "Creators are Kishore, Mohandas, and Latheeswaran at iGrid Lab. They are young, unmarried engineers.",
-                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
-                }
-            ]
+            "created_at": now,
+            "facts": [{"note": fact, "timestamp": now} for fact in CORE_LAB_FACTS]
         }
         self._save_data(data)
         return True
